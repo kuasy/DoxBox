@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="https://amp.azure.net/libs/amp/2.1.5/skins/amp-default/azuremediaplayer.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="amp">
+    <video id="azuremediaplayer"
+           class="azuremediaplayer amp-default-skin amp-big-play-centered" tabindex="0"></video>
+
+    <video controls="true">
+        <source src="https://www.youtube.com/watch?v=p67Mo_QYE0w" type="video/mp4" />
+    </video>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://amp.azure.net/libs/amp/2.1.5/azuremediaplayer.min.js"></script>
+    <script type="text/javascript">
+			function callResolveService(){
+				var resolveSettings = {
+					"async": true,
+					"crossDomain": true,
+					"url": "https://azne-cc-api-q003.azurewebsites.net/api/Resolve?providerId=vubiquity.co.uk&assetId=VUBI0000002215184894&OfferId=VUBI0000000001062305",
+					"method": "GET"
+				};
+
+				$.ajax(resolveSettings).done(function (response) {
+					var url = response.Url;
+					AWPlayer(url);
+				}).fail(function (err) {
+				console.log(err.statusText);
+				});
+			}
+
+
+			function AWPlayer (url){
+				var myOptions = {
+					"nativeControlsForTouch":false,
+					controls: true,
+					autoplay: true,
+					width: "640",
+					height: "400"
+				};
+
+				myPlayer = amp("azuremediaplayer", myOptions);
+				myPlayer.src([
+					{
+						"src": url,
+						"type": "application/vnd.ms-sstr+xml"
+					}]);
+			}
+	</script>
+    <script>
+	    callResolveService();
+	</script>
+</div>
+</body>
+</html>
