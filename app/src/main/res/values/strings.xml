@@ -15,7 +15,9 @@
     </string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_movies">Movies</string>
+    <string name="title_series">Series</string>
+    <string name="title_twitch">Twitch</string>
+    <string name="title_youtube">Youtube</string>
     <string name="title_activity_home">HomeActivity</string>
 </resources>
