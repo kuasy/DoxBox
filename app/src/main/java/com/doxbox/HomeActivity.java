@@ -1,9 +1,11 @@
 package com.doxbox;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -11,14 +13,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -40,18 +38,21 @@ public class HomeActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            ActionMenuItemView search = findViewById(R.id.search);
+            @SuppressLint("RestrictedApi") SearchView searchView = (SearchView) search.getItemData().getActionView();
+
             switch (item.getItemId()) {
                 case R.id.navigation_movies:
-                    searchMovies("*");
+                    searchMovies(searchView.getQuery().toString());
                     return true;
                 case R.id.navigation_series:
-                    searchSeries("*");
+                    searchSeries(searchView.getQuery().toString());
                     return true;
                 case R.id.navigation_twitch:
                     //mTextMessage.setText(R.string.title_twitch);
                     return true;
                 case R.id.navigation_youtube:
-                    searchMediaYoutube(null);
+                    searchMediaYoutube(searchView.getQuery().toString());
                     return true;
             }
             return false;
@@ -166,7 +167,10 @@ public class HomeActivity extends AppCompatActivity {
 
         private void searchMediaVubiquity(String mediaType, final String imageType, String filter) {
 
-            String url = "https://ccsearch-q003.azureedge.net/indexes/0000d-"+mediaType+"-index/docs?api-version=2017-11-11&api-key=9454520FF92761E7FAABADB84FFBD150&search="+filter+"&$select=titleLong,summaryMedium,"+imageType+"&$top=5";
+            if(null == filter || filter.isEmpty()) {
+                filter = "*";
+            }
+            String url = "https://ccsearch-q003.azureedge.net/indexes/0000d-"+mediaType+"-index/docs?api-version=2017-11-11&api-key=9454520FF92761E7FAABADB84FFBD150&search="+filter+"&$select=titleLong,summaryMedium,"+imageType+"&$top=10";
             SingletonRequestQueue queue = SingletonRequestQueue.getInstance(this);
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
