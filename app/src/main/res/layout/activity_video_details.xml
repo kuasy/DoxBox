@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".VideoDetailsActivity"
+    android:orientation="vertical">
+    
+    <WebView
+        android:id="@+id/webViewTrailerPlayback"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="32">
+
+    </WebView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="65"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Video Title"
+            android:textSize="25dp"
+            android:paddingLeft="10dp"
+            android:textStyle="bold"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="25dp">
+
+            <TextView
+                android:id="@+id/textViewYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tvYear"
+                />
+
+            <TextView
+                android:id="@+id/textViewActor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tvActor"
+                />
+
+            <TextView
+                android:id="@+id/textViewDirector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tvDirector"
+                />
+
+            <TextView
+                android:id="@+id/textViewGenre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tvGenre"
+                />
+
+            <TextView
+                android:id="@+id/textViewDuration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tvDuration"
+                />
+
+            <TextView
+                android:id="@+id/textViewSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/tvSummary"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:paddingRight="25dp"
+                android:paddingBottom="10dp">
+
+                <Button
+                    android:id="@+id/btnWatchNow"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:text="@string/btnWatchNow"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

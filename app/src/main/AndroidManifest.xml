@@ -17,19 +17,26 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login">
+            android:label="@string/title_activity_login"
+            android:exported="true">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
 
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".HomeActivity"
             android:exported="true"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".PlayerActivity"
+            android:exported="true"
+            android:theme="@style/AppFullScreenTheme"/>
+        <activity android:name=".VideoDetailsActivity"
+            android:exported="true"/>
+        <activity android:name=".FeedActivity"/>
     </application>
 
 </manifest>
