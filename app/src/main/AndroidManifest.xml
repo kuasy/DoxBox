@@ -26,10 +26,9 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"
+            android:label="@string/title_activity_login"></activity>
+        <activity android:name=".FeedActivity"></activity>
     </application>
 
 </manifest>
