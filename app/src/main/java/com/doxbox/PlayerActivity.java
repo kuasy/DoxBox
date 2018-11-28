@@ -13,9 +13,6 @@ public class PlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player);
 
         //Hamon
-        WebView webView = (WebView) findViewById(R.id.webViewPlayback);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebChromeClient(new WebChromeClient());
-        webView.loadUrl("file:///android_asset/player/playback.html");
+
     }
 }
