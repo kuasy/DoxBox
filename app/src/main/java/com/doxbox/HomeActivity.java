@@ -36,6 +36,7 @@ public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";
     private ArrayList<String> mTitles = new ArrayList<>();
     private ArrayList<String> mImagesUrls = new ArrayList<>();
+    private ArrayList<String> mShortTitle = new ArrayList<>();
 
     //private TextView mTextMessage;
 
@@ -78,7 +79,7 @@ public class HomeActivity extends AppCompatActivity {
 
     protected void searchMovies() {
         SingletonRequestQueue queue = SingletonRequestQueue.getInstance(this);
-        String url = "https://ccsearch-q003.azureedge.net/indexes/0000d-movie-index/docs?api-version=2017-11-11&api-key=9454520FF92761E7FAABADB84FFBD150&search=*&$select=titleLong,boxCover&$top=5";
+        String url = "https://ccsearch-q003.azureedge.net/indexes/0000d-movie-index/docs?api-version=2017-11-11&api-key=9454520FF92761E7FAABADB84FFBD150&search=*&$select=titleLong,summaryMedium,boxCover&$top=5";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
                     @Override
@@ -103,7 +104,8 @@ public class HomeActivity extends AppCompatActivity {
 
                                 //Picasso.get().load(imgUrl).into(img[i]);
                                 mImagesUrls.add(imgUrl);
-                                mTitles.add("Title Lorem "+i);
+                                mTitles.add(((((JSONObject) response.getJSONArray("value").get(i)).getString("titleLong"))));
+                                mShortTitle.add(((((JSONObject) response.getJSONArray("value").get(i)).getString("summaryMedium"))));
                                 System.out.println("Response: " + response);
 
                                 initRecyclerView();
@@ -127,7 +129,7 @@ public class HomeActivity extends AppCompatActivity {
         private void initRecyclerView() {
             Log.d(TAG, "initRecyclerView: init recycleview.");
             RecyclerView recyclerView = findViewById(R.id.recycler_view);
-            RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mTitles, mImagesUrls);
+            RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mTitles, mImagesUrls, mShortTitle);
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
         }
