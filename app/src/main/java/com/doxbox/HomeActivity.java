@@ -198,6 +198,7 @@ public class HomeActivity extends AppCompatActivity {
                         mTitles = new ArrayList<>();
                         mImagesUrls = new ArrayList<>();
                         mShortTitle = new ArrayList<>();
+                        mVidID = new ArrayList<>();
                         for(int i=0;i<response.getJSONArray("value").length();i++) {
                             String imgUrl;
                             if(imageType.equals("boxCover")) {
