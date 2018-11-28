@@ -6,10 +6,15 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -17,19 +22,10 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.doxbox.http.SingletonRequestQueue;
-import com.squareup.picasso.Picasso;
-
-import org.apache.http.entity.StringEntity;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -40,28 +36,65 @@ public class HomeActivity extends AppCompatActivity {
 
     //private TextView mTextMessage;
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_movies:
-                    searchMovies();
+                    searchMovies("*");
                     return true;
                 case R.id.navigation_series:
-                    searchSeries();
+                    searchSeries("*");
                     return true;
                 case R.id.navigation_twitch:
                     //mTextMessage.setText(R.string.title_twitch);
                     return true;
                 case R.id.navigation_youtube:
-                    searchMediaYoutube();
+                    searchMediaYoutube(null);
                     return true;
             }
             return false;
         }
     };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_field, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+                switch (bottomNavigationView.getSelectedItemId()) {
+                    case R.id.navigation_movies:
+                        searchMovies(query);
+                        return true;
+                    case R.id.navigation_series:
+                        searchSeries(query);
+                        return true;
+                    case R.id.navigation_twitch:
+                        //mTextMessage.setText(R.string.title_twitch);
+                        return true;
+                    case R.id.navigation_youtube:
+                        searchMediaYoutube(query);
+                        return true;
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,20 +107,23 @@ public class HomeActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 
-        searchMovies();
+        searchMovies("*");
     }
 
 
-    protected void searchMovies() {
-        searchMediaVubiquity("movie", "boxCover");
+    protected void searchMovies(String filter) {
+        searchMediaVubiquity("movie", "boxCover", filter);
     }
 
-    protected void searchSeries() {
-        searchMediaVubiquity("series", "thumbnail");
+    protected void searchSeries(String filter) {
+        searchMediaVubiquity("series", "thumbnail", filter);
     }
 
-    protected void searchMediaYoutube(){
+    protected void searchMediaYoutube(String filter){
         String url = "https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&key=AIzaSyD5EixcAnWnY79VcQaM7L8p6GJqfQOdrqk&maxResults=10";
+        if(null!= filter && !filter.isEmpty()) {
+            url += "&q="+filter;
+        }
         SingletonRequestQueue queue = SingletonRequestQueue.getInstance(this);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
@@ -132,9 +168,9 @@ public class HomeActivity extends AppCompatActivity {
         queue.addToRequestQueue(jsonObjectRequest);
     }
 
-        private void searchMediaVubiquity(String mediaType, final String imageType){
+        private void searchMediaVubiquity(String mediaType, final String imageType, String filter) {
 
-            String url = "https://ccsearch-q003.azureedge.net/indexes/0000d-"+mediaType+"-index/docs?api-version=2017-11-11&api-key=9454520FF92761E7FAABADB84FFBD150&search=*&$select=titleLong,summaryMedium,"+imageType+"&$top=5";
+            String url = "https://ccsearch-q003.azureedge.net/indexes/0000d-"+mediaType+"-index/docs?api-version=2017-11-11&api-key=9454520FF92761E7FAABADB84FFBD150&search="+filter+"&$select=titleLong,summaryMedium,"+imageType+"&$top=5";
             SingletonRequestQueue queue = SingletonRequestQueue.getInstance(this);
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
@@ -157,10 +193,8 @@ public class HomeActivity extends AppCompatActivity {
                             mImagesUrls.add(imgUrl+"&q=60&w=100");
                             mTitles.add(((((JSONObject) response.getJSONArray("value").get(i)).getString("titleLong"))));
                             mShortTitle.add(((((JSONObject) response.getJSONArray("value").get(i)).getString("summaryMedium"))));
-                            System.out.println("Response: " + response);
-
-                            initRecyclerView();
                         }
+                        initRecyclerView();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
