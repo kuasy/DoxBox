@@ -22,12 +22,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private ArrayList<String> mTitles = new ArrayList<>();
     private ArrayList<String> mImages = new ArrayList<>();
+    private ArrayList<String> mShortTitle = new ArrayList<>();
     private Context mContext;
 
-    public RecyclerViewAdapter(Context mContext, ArrayList<String> mTitles, ArrayList<String> mImages) {
+    public RecyclerViewAdapter(Context mContext, ArrayList<String> mTitles, ArrayList<String> mImages, ArrayList<String> mShortTitle) {
         this.mTitles = mTitles;
         this.mImages = mImages;
         this.mContext = mContext;
+        this.mShortTitle = mShortTitle;
     }
 
     @NonNull
@@ -45,6 +47,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Picasso.get().load(mImages.get(position)).into(holder.image);
 
         holder.title.setText(mTitles.get(position));
+        holder.shortTitle.setText(mShortTitle.get(position));
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +68,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         ImageView image;
         TextView title;
+        TextView shortTitle;
         RelativeLayout parentLayout;
 
         public ViewHolder(View itemView){
@@ -72,6 +76,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             image = itemView.findViewById(R.id.image);
             title = itemView.findViewById(R.id.title);
+            shortTitle = itemView.findViewById(R.id.shortTitle);
             parentLayout = itemView.findViewById(R.id.parent_layout);
 
         }
