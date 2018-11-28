@@ -79,6 +79,20 @@
                 android:text="@string/tvSummary"
                 />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:paddingRight="25dp"
+                android:paddingBottom="10dp">
+
+                <Button
+                    android:id="@+id/btnWatchNow"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:text="@string/btnWatchNow"/>
+            </LinearLayout>
+
 
         </LinearLayout>
 

@@ -1,5 +1,7 @@
 package com.doxbox;
 
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -7,6 +9,7 @@ import android.view.View;
 import android.webkit.ConsoleMessage;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -24,7 +27,7 @@ import org.json.JSONObject;
 
 import java.util.concurrent.TimeUnit;
 
-public class VideoDetailsActivity extends AppCompatActivity {
+public class VideoDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
     String search = "dnViaXF1aXR5LmNvLnVrL3RpdGxlL1ZVQkkwMDAwMDAwMDAwMzM0ODYwL09uZVRpbWUvc3RyZWFtL3ByaXZhdGU6U0QvMjAxNy0wMy0wM1QwMDowMDowMC8yMDIwLTAyLTI4VDIzOjU5OjU5";
 
@@ -47,6 +50,7 @@ public class VideoDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_video_details);
 
         tvActor = (TextView) findViewById(R.id.textViewActor);
@@ -69,6 +73,9 @@ public class VideoDetailsActivity extends AppCompatActivity {
             }
         });
         webView.getSettings().setJavaScriptEnabled(true);
+
+        Button btnWatchNow = (Button) findViewById(R.id.btnWatchNow);
+        btnWatchNow.setOnClickListener(this);
 
         searchVideoDetails();
     }
@@ -167,4 +174,16 @@ public class VideoDetailsActivity extends AppCompatActivity {
         webView.loadUrl("file:///android_asset/player/playback.html?assetId=" + assetIDTrailer + "&offerId=" + offerID);
     }
 
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btnWatchNow:
+                Intent intent = new Intent(this, PlayerActivity.class);
+                intent.putExtra(PlayerActivity.EXTRA_OFFER, offerID);
+                intent.putExtra(PlayerActivity.EXTRA_ASSET, assetIDMovie);
+                startActivity(intent);
+                break;
+        }
+    }
 }

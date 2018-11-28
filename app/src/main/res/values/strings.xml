@@ -27,4 +27,5 @@
     <string name="tvDuration">Duration: </string>
     <string name="tvGenre">Genre: </string>
     <string name="tvSummary">Summary: </string>
+    <string name="btnWatchNow">Watch Now!</string>
 </resources>
