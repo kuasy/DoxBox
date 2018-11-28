@@ -29,14 +29,13 @@ import java.util.concurrent.TimeUnit;
 
 public class VideoDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
-    static String VIDEO_ID = "videoID";
-
     String search = "dnViaXF1aXR5LmNvLnVrL3RpdGxlL1ZVQkkwMDAwMDAwMDAwMzM0ODYwL09uZVRpbWUvc3RyZWFtL3ByaXZhdGU6U0QvMjAxNy0wMy0wM1QwMDowMDowMC8yMDIwLTAyLTI4VDIzOjU5OjU5";
 
     String assetIDTrailer = "VUBI0000002215184894";
     String assetIDMovie = "VUBI0000002215184894";
     String offerID = "VUBI0000000001062305";
 
+    int origin;
 
     TextView tvTitle;
     TextView tvYear;
@@ -81,7 +80,12 @@ public class VideoDetailsActivity extends AppCompatActivity implements View.OnCl
         Button btnWatchNow = (Button) findViewById(R.id.btnWatchNow);
         btnWatchNow.setOnClickListener(this);
 
-        searchVideoDetails();
+        switch (origin){
+            case R.id.navigation_movies:
+                searchVideoDetails();
+                break;
+        }
+
     }
 
     protected void searchVideoDetails() {
@@ -194,7 +198,8 @@ public class VideoDetailsActivity extends AppCompatActivity implements View.OnCl
     void loadExtras(){
         Intent intent = this.getIntent();
         if(intent!= null){
-            search = intent.getStringExtra(VIDEO_ID);
+            search = intent.getStringExtra(RecyclerViewAdapter.VIDEO_ID);
+            origin = intent.getIntExtra(RecyclerViewAdapter.ORIGIN,-1);
         }
     }
 }
