@@ -26,14 +26,16 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:exported="true"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/title_activity_login"
+            android:exported="true">
+        </activity>
         <activity
             android:name=".PlayerActivity"
             android:exported="true"
             android:theme="@style/AppFullScreenTheme" />
         <activity android:name=".VideoDetailsActivity"
             android:exported="true"></activity>
+        <activity android:name=".FeedActivity"></activity>
     </application>
 
 </manifest>
