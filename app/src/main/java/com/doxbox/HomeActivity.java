@@ -1,9 +1,15 @@
 package com.doxbox;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.ActionMenuItemView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -12,13 +18,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -36,24 +39,30 @@ public class HomeActivity extends AppCompatActivity {
     private ArrayList<String> mVidID = new ArrayList<>();
     private BottomNavigationView bottomNavigationView;
 
+    private View homeView;
+    private View progressView;
+
     //private TextView mTextMessage;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            ActionMenuItemView search = findViewById(R.id.search);
+            @SuppressLint("RestrictedApi") SearchView searchView = (SearchView) search.getItemData().getActionView();
+            showProgress(true);
             switch (item.getItemId()) {
                 case R.id.navigation_movies:
-                    searchMovies("*");
+                    searchMovies(searchView.getQuery().toString());
                     return true;
                 case R.id.navigation_series:
-                    searchSeries("*");
+                    searchSeries(searchView.getQuery().toString());
                     return true;
                 case R.id.navigation_twitch:
                     //mTextMessage.setText(R.string.title_twitch);
                     return true;
                 case R.id.navigation_youtube:
-                    searchMediaYoutube(null);
+                    searchMediaYoutube(searchView.getQuery().toString());
                     return true;
             }
             return false;
@@ -108,7 +117,8 @@ public class HomeActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-
+        homeView = findViewById(R.id.recycler_view);
+        progressView = findViewById(R.id.home_progress);
         searchMovies("*");
     }
 
@@ -151,9 +161,8 @@ public class HomeActivity extends AppCompatActivity {
                         }
                         mShortTitle.add(shortTitle);
                         System.out.println("Response: " + response);
-
-                        initRecyclerView();
                     }
+                    initRecyclerView();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -172,7 +181,11 @@ public class HomeActivity extends AppCompatActivity {
 
         private void searchMediaVubiquity(String mediaType, final String imageType, String filter) {
 
-            String url = "https://ccsearch-q003.azureedge.net/indexes/0000d-"+mediaType+"-index/docs?api-version=2017-11-11&api-key=9454520FF92761E7FAABADB84FFBD150&search="+filter+"&$select=titleLong,summaryMedium,id,"+imageType+"&$top=5";
+            if(null == filter || filter.isEmpty()) {
+                filter = "*";
+            }
+
+            String url = "https://ccsearch-q003.azureedge.net/indexes/0000d-"+mediaType+"-index/docs?api-version=2017-11-11&api-key=9454520FF92761E7FAABADB84FFBD150&search="+filter+"&$select=titleLong,summaryMedium,id,"+imageType+"&$top=10";
             SingletonRequestQueue queue = SingletonRequestQueue.getInstance(this);
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
@@ -223,7 +236,41 @@ public class HomeActivity extends AppCompatActivity {
             RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mTitles, mImagesUrls, mShortTitle, mVidID, bottomNavigationView.getSelectedItemId());
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            showProgress(false);
         }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            homeView.setVisibility(show ? View.GONE : View.VISIBLE);
+            homeView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    homeView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            progressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            homeView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
 
     }
