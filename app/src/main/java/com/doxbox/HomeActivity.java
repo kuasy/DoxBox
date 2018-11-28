@@ -147,6 +147,7 @@ public class HomeActivity extends AppCompatActivity {
                     mTitles = new ArrayList<>();
                     mImagesUrls = new ArrayList<>();
                     mShortTitle = new ArrayList<>();
+                    mVidID = new ArrayList<>();
                     for(int i=0;i<response.getJSONArray("items").length();i++) {
                         String title = (((JSONObject) response.getJSONArray("items").get(i)).getJSONObject("snippet").getString("title"));
                         String shortTitle = (((JSONObject) response.getJSONArray("items").get(i)).getJSONObject("snippet").getString("description"));
