@@ -6,25 +6,30 @@
     <link href="https://amp.azure.net/libs/amp/2.1.5/skins/amp-default/azuremediaplayer.min.css" rel="stylesheet">
 </head>
 
-<body>
-<div id="amp">
+<body bgcolor="#000000">
+<div id="amp" style="text-align: center;">
     <video id="azuremediaplayer"
            class="azuremediaplayer amp-default-skin amp-big-play-centered" tabindex="0"></video>
 
-    <video controls="true">
-        <source src="https://www.youtube.com/watch?v=p67Mo_QYE0w" type="video/mp4" />
-    </video>
+    <p></p>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://amp.azure.net/libs/amp/2.1.5/azuremediaplayer.min.js"></script>
     <script type="text/javascript">
 			function callResolveService(){
+			    var url_string = window.location.href;
+                var url = new URL(url_string);
+                var assetId = url.searchParams.get("assetId");
+                var offerId = url.searchParams.get("offerId");
+
 				var resolveSettings = {
 					"async": true,
 					"crossDomain": true,
-					"url": "https://azne-cc-api-q003.azurewebsites.net/api/Resolve?providerId=vubiquity.co.uk&assetId=VUBI0000002215184894&OfferId=VUBI0000000001062305",
+					"url": "https://azne-cc-api-q003.azurewebsites.net/api/Resolve?providerId=vubiquity.co.uk&assetId=" + assetId + "&OfferId=" + offerId,
 					"method": "GET"
 				};
+
+
 
 				$.ajax(resolveSettings).done(function (response) {
 					var url = response.Url;
@@ -40,8 +45,8 @@
 					"nativeControlsForTouch":false,
 					controls: true,
 					autoplay: true,
-					width: "640",
-					height: "400"
+					"width": "100%",
+                    "height": "auto"
 				};
 
 				myPlayer = amp("azuremediaplayer", myOptions);

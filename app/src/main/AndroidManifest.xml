@@ -27,8 +27,12 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login">
-
         </activity>
+
+        <activity
+            android:name=".PlayerActivity"
+            android:exported="true"
+            android:theme="@style/AppFullScreenTheme" />
     </application>
 
 </manifest>
