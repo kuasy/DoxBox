@@ -80,7 +80,6 @@ public class HomeActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
                 switch (bottomNavigationView.getSelectedItemId()) {
                     case R.id.navigation_movies:
                         searchMovies(query);
@@ -114,11 +113,13 @@ public class HomeActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: started.");
 
         //mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
 
         homeView = findViewById(R.id.recycler_view);
         progressView = findViewById(R.id.home_progress);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        showProgress(true);
         searchMovies("*");
     }
 
