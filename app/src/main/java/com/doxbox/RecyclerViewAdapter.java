@@ -20,8 +20,8 @@ import java.util.ArrayList;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
 
     private static final String TAG = "RecyclerViewAdapter";
-    private static final String VIDEO_ID = "videoID";
-    private static final String ORIGIN = "origin";
+    static final String VIDEO_ID = "videoID";
+    static final String ORIGIN = "origin";
 
     private ArrayList<String> mTitles = new ArrayList<>();
     private ArrayList<String> mImages = new ArrayList<>();
