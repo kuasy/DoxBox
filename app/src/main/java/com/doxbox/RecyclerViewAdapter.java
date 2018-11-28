@@ -2,6 +2,7 @@ package com.doxbox;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -65,8 +66,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 intent.putExtra(VIDEO_ID, mVidID.get(position));
                 intent.putExtra(ORIGIN, originID);
 
-                mContext.startActivity(intent);
-                Toast.makeText(mContext, mTitles.get(position), Toast.LENGTH_LONG).show();
+                if(originID == R.id.navigation_youtube) {
+                    String youtubeUrl = "http://www.youtube.com/embed/"+mVidID.get(position);
+                    mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(youtubeUrl)));
+                } else {
+                    mContext.startActivity(intent);
+                }
+
             }
         });
     }
@@ -90,7 +96,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             title = itemView.findViewById(R.id.title);
             shortTitle = itemView.findViewById(R.id.shortTitle);
             parentLayout = itemView.findViewById(R.id.parent_layout);
-
         }
     }
 }

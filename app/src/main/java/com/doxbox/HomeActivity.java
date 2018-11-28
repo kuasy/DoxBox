@@ -152,9 +152,10 @@ public class HomeActivity extends AppCompatActivity {
                         String title = (((JSONObject) response.getJSONArray("items").get(i)).getJSONObject("snippet").getString("title"));
                         String shortTitle = (((JSONObject) response.getJSONArray("items").get(i)).getJSONObject("snippet").getString("description"));
                         String imgUrl = (((JSONObject) response.getJSONArray("items").get(i)).getJSONObject("snippet").getJSONObject("thumbnails").getJSONObject("high").getString("url"));
-
                         imgUrl = imgUrl.replace("\\", "");
+                        String vidID = (((JSONObject) response.getJSONArray("items").get(i)).getJSONObject("id").getString("videoId"));
 
+                        mVidID.add(vidID);
                         mImagesUrls.add(imgUrl);
                         if(title.length()>40) {
                             mTitles.add(title.substring(0, 40));
