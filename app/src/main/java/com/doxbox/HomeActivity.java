@@ -56,7 +56,7 @@ public class HomeActivity extends AppCompatActivity {
                     //mTextMessage.setText(R.string.title_twitch);
                     return true;
                 case R.id.navigation_youtube:
-                    //mTextMessage.setText(R.string.title_youtube);
+                    searchMediaYoutube();
                     return true;
             }
             return false;
@@ -78,15 +78,57 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-        protected void searchMovies() {
-            searchMedia("movie", "boxCover");
-        }
+    protected void searchMovies() {
+        searchMediaVubiquity("movie", "boxCover");
+    }
 
-        protected void searchSeries() {
-            searchMedia("series", "thumbnail");
-        }
+    protected void searchSeries() {
+        searchMediaVubiquity("series", "thumbnail");
+    }
 
-        private void searchMedia(String mediaType, final String imageType){
+    protected void searchMediaYoutube(){
+        String url = "https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&key=AIzaSyD5EixcAnWnY79VcQaM7L8p6GJqfQOdrqk&maxResults=10";
+        SingletonRequestQueue queue = SingletonRequestQueue.getInstance(this);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response){
+
+                try {
+                    mTitles = new ArrayList<>();
+                    mImagesUrls = new ArrayList<>();
+                    mShortTitle = new ArrayList<>();
+                    for(int i=0;i<response.getJSONArray("items").length();i++) {
+                        String title = (((JSONObject) response.getJSONArray("items").get(i)).getJSONObject("snippet").getString("title"));
+                        String shortTitle = (((JSONObject) response.getJSONArray("items").get(i)).getJSONObject("snippet").getString("description"));
+                        String imgUrl = (((JSONObject) response.getJSONArray("items").get(i)).getJSONObject("snippet").getJSONObject("thumbnails").getJSONObject("medium").getString("url"));
+
+                        imgUrl = imgUrl.replace("\\", "");
+
+                        mImagesUrls.add(imgUrl);
+                        mTitles.add(title);
+                        mShortTitle.add(shortTitle);
+                        System.out.println("Response: " + response);
+
+                        initRecyclerView();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }},
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        System.out.println("ERRO NA CHAMADA DO SERVIÇO DE BUSCA DE ITENS");
+                    }
+                }
+        );
+        DefaultRetryPolicy policy = new DefaultRetryPolicy(0, -1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        jsonObjectRequest.setRetryPolicy(policy);
+        queue.addToRequestQueue(jsonObjectRequest);
+    }
+
+        private void searchMediaVubiquity(String mediaType, final String imageType){
 
             String url = "https://ccsearch-q003.azureedge.net/indexes/0000d-"+mediaType+"-index/docs?api-version=2017-11-11&api-key=9454520FF92761E7FAABADB84FFBD150&search=*&$select=titleLong,summaryMedium,"+imageType+"&$top=5";
             SingletonRequestQueue queue = SingletonRequestQueue.getInstance(this);
