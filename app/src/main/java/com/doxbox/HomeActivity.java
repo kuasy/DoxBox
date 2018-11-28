@@ -33,6 +33,8 @@ public class HomeActivity extends AppCompatActivity {
     private ArrayList<String> mTitles = new ArrayList<>();
     private ArrayList<String> mImagesUrls = new ArrayList<>();
     private ArrayList<String> mShortTitle = new ArrayList<>();
+    private ArrayList<String> mVidID = new ArrayList<>();
+    private BottomNavigationView bottomNavigationView;
 
     //private TextView mTextMessage;
 
@@ -69,7 +71,7 @@ public class HomeActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+                bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
                 switch (bottomNavigationView.getSelectedItemId()) {
                     case R.id.navigation_movies:
                         searchMovies(query);
@@ -170,7 +172,7 @@ public class HomeActivity extends AppCompatActivity {
 
         private void searchMediaVubiquity(String mediaType, final String imageType, String filter) {
 
-            String url = "https://ccsearch-q003.azureedge.net/indexes/0000d-"+mediaType+"-index/docs?api-version=2017-11-11&api-key=9454520FF92761E7FAABADB84FFBD150&search="+filter+"&$select=titleLong,summaryMedium,"+imageType+"&$top=5";
+            String url = "https://ccsearch-q003.azureedge.net/indexes/0000d-"+mediaType+"-index/docs?api-version=2017-11-11&api-key=9454520FF92761E7FAABADB84FFBD150&search="+filter+"&$select=titleLong,summaryMedium,id,"+imageType+"&$top=5";
             SingletonRequestQueue queue = SingletonRequestQueue.getInstance(this);
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
@@ -189,6 +191,9 @@ public class HomeActivity extends AppCompatActivity {
                                 imgUrl = (((JSONObject) response.getJSONArray("value").get(i)).getJSONArray("thumbnail").getString(0));
                             }
                             imgUrl = imgUrl.replace("\\", "");
+                            String vidID = ((JSONObject)response.getJSONArray("value").get(i)).getString("id");
+
+                            mVidID.add(vidID);
 
                             mImagesUrls.add(imgUrl+"&q=60&w=100");
                             mTitles.add(((((JSONObject) response.getJSONArray("value").get(i)).getString("titleLong"))));
@@ -215,7 +220,7 @@ public class HomeActivity extends AppCompatActivity {
         private void initRecyclerView() {
             Log.d(TAG, "initRecyclerView: init recycleview.");
             RecyclerView recyclerView = findViewById(R.id.recycler_view);
-            RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mTitles, mImagesUrls, mShortTitle);
+            RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mTitles, mImagesUrls, mShortTitle, mVidID, bottomNavigationView.getSelectedItemId());
             recyclerView.setAdapter(adapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
         }

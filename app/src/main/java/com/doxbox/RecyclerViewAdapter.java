@@ -1,6 +1,7 @@
 package com.doxbox;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,17 +20,23 @@ import java.util.ArrayList;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
 
     private static final String TAG = "RecyclerViewAdapter";
+    private static final String VIDEO_ID = "videoID";
+    private static final String ORIGIN = "origin";
 
     private ArrayList<String> mTitles = new ArrayList<>();
     private ArrayList<String> mImages = new ArrayList<>();
     private ArrayList<String> mShortTitle = new ArrayList<>();
+    private ArrayList<String> mVidID = new ArrayList<>();
     private Context mContext;
+    private int originID;
 
-    public RecyclerViewAdapter(Context mContext, ArrayList<String> mTitles, ArrayList<String> mImages, ArrayList<String> mShortTitle) {
+    public RecyclerViewAdapter(Context mContext, ArrayList<String> mTitles, ArrayList<String> mImages, ArrayList<String> mShortTitle, ArrayList<String> mVidID, int originID) {
         this.mTitles = mTitles;
         this.mImages = mImages;
         this.mContext = mContext;
         this.mShortTitle = mShortTitle;
+        this.mVidID = mVidID;
+        this.originID = originID;
     }
 
     @NonNull
@@ -54,6 +61,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked on: " + mTitles.get(position));
 
+                Intent intent = new Intent(mContext, VideoDetailsActivity.class);
+                intent.putExtra(VIDEO_ID, mVidID.get(position));
+                intent.putExtra(ORIGIN, originID);
+
+                mContext.startActivity(intent);
                 Toast.makeText(mContext, mTitles.get(position), Toast.LENGTH_LONG).show();
             }
         });
