@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">DoxBox</string>
-    <string name="title_activity_login">DoxBox</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
@@ -19,5 +18,6 @@
     <string name="title_series">Series</string>
     <string name="title_twitch">Twitch</string>
     <string name="title_youtube">Youtube</string>
-    <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_home">Trending</string>
 </resources>
