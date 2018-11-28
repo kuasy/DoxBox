@@ -24,6 +24,9 @@ import com.doxbox.http.SingletonRequestQueue;
 
 public class PlayerActivity extends AppCompatActivity {
 
+    String assetID = "VUBI0000002215184894";
+    String offerID = "VUBI0000000001062305";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,10 +45,6 @@ public class PlayerActivity extends AppCompatActivity {
             }
         });
         webView.getSettings().setJavaScriptEnabled(true);
-
-        String assetID = "VUBI0000002215184894";
-        String offerID = "VUBI0000000001062305";
-
         webView.loadUrl("file:///android_asset/player/playback.html?assetId=" + assetID + "&offerId=" + offerID);
 
     }

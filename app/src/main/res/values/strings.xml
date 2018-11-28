@@ -20,4 +20,11 @@
     <string name="title_youtube">Youtube</string>
     <string name="title_activity_login">Login</string>
     <string name="title_activity_home">Trending</string>
+
+    <string name="tvYear">Year: </string>
+    <string name="tvActor">Actor: </string>
+    <string name="tvDirector">Director: </string>
+    <string name="tvDuration">Duration: </string>
+    <string name="tvGenre">Genre: </string>
+    <string name="tvSummary">Summary: </string>
 </resources>
