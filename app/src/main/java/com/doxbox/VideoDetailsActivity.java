@@ -29,6 +29,8 @@ import java.util.concurrent.TimeUnit;
 
 public class VideoDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
+    static String VIDEO_ID = "videoID";
+
     String search = "dnViaXF1aXR5LmNvLnVrL3RpdGxlL1ZVQkkwMDAwMDAwMDAwMzM0ODYwL09uZVRpbWUvc3RyZWFtL3ByaXZhdGU6U0QvMjAxNy0wMy0wM1QwMDowMDowMC8yMDIwLTAyLTI4VDIzOjU5OjU5";
 
     String assetIDTrailer = "VUBI0000002215184894";
@@ -52,6 +54,8 @@ public class VideoDetailsActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_video_details);
+
+        loadExtras();
 
         tvActor = (TextView) findViewById(R.id.textViewActor);
         tvDirector = (TextView) findViewById(R.id.textViewDirector);
@@ -184,6 +188,13 @@ public class VideoDetailsActivity extends AppCompatActivity implements View.OnCl
                 intent.putExtra(PlayerActivity.EXTRA_ASSET, assetIDMovie);
                 startActivity(intent);
                 break;
+        }
+    }
+
+    void loadExtras(){
+        Intent intent = this.getIntent();
+        if(intent!= null){
+            search = intent.getStringExtra(VIDEO_ID);
         }
     }
 }
