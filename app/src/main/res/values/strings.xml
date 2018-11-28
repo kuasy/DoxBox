@@ -28,4 +28,5 @@
     <string name="tvGenre">Genre: </string>
     <string name="tvSummary">Summary: </string>
     <string name="btnWatchNow">Watch Now!</string>
+    <string name="search_title">Search</string>
 </resources>
