@@ -82,15 +82,19 @@ public class VideoDetailsActivity extends AppCompatActivity implements View.OnCl
 
         switch (origin){
             case R.id.navigation_movies:
-                searchVideoDetails();
+                searchVideoDetails("movie");
+                break;
+
+            case R.id.navigation_series:
+                searchVideoDetails("series");
                 break;
         }
 
     }
 
-    protected void searchVideoDetails() {
+    protected void searchVideoDetails(String mediaType) {
         SingletonRequestQueue queue = SingletonRequestQueue.getInstance(this);
-        String url = "https://ccsearch-q003.azureedge.net/indexes/0000d-movie-index/docs?api-version=2017-11-11&api-key=9454520FF92761E7FAABADB84FFBD150&search=" + search + "&$select=titleLong,year,primaryGenre,preview,movie,offer,summaryLong,actor,director,duration&$top=1";
+        String url = "https://ccsearch-q003.azureedge.net/indexes/0000d-"+ mediaType + "-index/docs?api-version=2017-11-11&api-key=9454520FF92761E7FAABADB84FFBD150&search=" + search + "&$select=titleLong,year,primaryGenre,preview,movie,offer,summaryLong,actor,director,duration&$top=1";
         JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
